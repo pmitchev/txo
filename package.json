@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/interplanaria/txo.git"
+    "url": "https://github.com/pmitchev/txo.git"
   },
   "bin": {
     "txo": "./index.js"
