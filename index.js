@@ -46,7 +46,7 @@ var fromHash = function(hash, verbose, config) {
 }
 var fromTx = function(transaction, options) {
   return new Promise(function(resolve, reject) {
-    let gene = new bsv.Transaction(transaction);
+    let gene = new bsv.Tx.fromHex(transaction);
     let t = gene.toObject()
     let result = [];
     let inputs = [];
