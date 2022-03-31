@@ -47,7 +47,6 @@ var fromHash = function(hash, verbose, config) {
 var fromTx = function(transaction, options) {
   return new Promise(function(resolve, reject) {
     let gene = bsv.Tx.fromHex(transaction);
-    console.log(JSON.stringify(gene))
     let t = gene
     let result = [];
     let inputs = [];
