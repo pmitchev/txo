@@ -46,14 +46,15 @@ var fromHash = function(hash, verbose, config) {
 }
 var fromTx = function(transaction, options) {
   return new Promise(function(resolve, reject) {
-    let gene = new bsv.Tx.fromHex(transaction);
-    let t = gene.toObject()
+    let gene = bsv.Tx.fromHex(transaction);
+    console.log(JSON.stringify(gene))
+    let t = gene
     let result = [];
     let inputs = [];
     let outputs = [];
     let graph = {};
-    if (gene.inputs) {
-      gene.inputs.forEach(function(input, input_index) {
+    if (gene.txIns) {
+      gene.txIns.forEach(function(input, input_index) {
         if (input.script) {
           let xput = { i: input_index, seq: input.sequenceNumber }
           input.script.chunks.forEach(function(c, chunk_index) {
@@ -80,10 +81,12 @@ var fromTx = function(transaction, options) {
             }
           })
           let sender = {
-            h: input.prevTxId.toString('hex'),
-            i: input.outputIndex
+            h: input.txHashBuf.reverse().toString('hex'),
+            i: input.txOutNum
           }
-          let address = input.script.toAddress(bsv.Networks.livenet).toString()
+          const address = input.script.isPubKeyHashIn() ?
+            bsv.Address.fromPubKey(bsv.PubKey.fromBuffer(input.script.chunks[1].buf)).toString() :
+            false;
           if (address && address.length > 0) {
             sender.a = address;
           }
@@ -92,8 +95,8 @@ var fromTx = function(transaction, options) {
         }
       })
     }
-    if (gene.outputs) {
-      gene.outputs.forEach(function(output, output_index) {
+    if (gene.txOuts) {
+      gene.txOuts.forEach(function(output, output_index) {
         if (output.script) {
           let xput = { i: output_index }
           output.script.chunks.forEach(function(c, chunk_index) {
@@ -126,7 +129,9 @@ var fromTx = function(transaction, options) {
             v: output.satoshis,
             i: output_index
           }
-          let address = output.script.toAddress(bsv.Networks.livenet).toString()
+          const address = output.script.isPubKeyHashOut() ?
+            bsv.Address.fromPubKeyHashBuf(output.script.chunks[2].buf).toString() :
+            false;
           if (address && address.length > 0) {
             receiver.a = address;
           }
