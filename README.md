@@ -1,6 +1,6 @@
 # TXO (BSV2)
 
-###Edit:###
+Edit:
 This code is the same as unwriter's.  It just uses bsv2 as a lib instead of bsv
 
 > Transaction Object
