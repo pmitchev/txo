@@ -47,6 +47,7 @@ var fromHash = function(hash, verbose, config) {
 var fromTx = function(transaction, options) {
   return new Promise(function(resolve, reject) {
     let gene = bsv.Tx.fromHex(transaction);
+    const txid = gene.id()
     let t = gene
     let result = [];
     let inputs = [];
@@ -140,7 +141,7 @@ var fromTx = function(transaction, options) {
       })
     }
     let r = {
-      tx: { h: t.hash },
+      tx: { h: txid },
       in: inputs,
       out: outputs,
       lock: t.nLockTime
